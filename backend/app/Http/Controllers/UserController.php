@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\LoginUserRequest;
+use App\Http\Requests\User\RegisterUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -86,21 +88,49 @@ class UserController extends Controller
     }
 
 
-    public  function  login (LoginUserRequest $request): JsonResponse
+    public function login(LoginUserRequest $request): JsonResponse
     {
 
         try {
-            $user = User::where('email',$request->email)->where('password',$request->password)->first();
-            $data = $user??"user not found";
-            $status = "OK";
+            $user = User::where('email',$request->email)->first();
+            if(!$user) return response()->json(["error"=>"User not exists!"])->setStatusCode(409);
+            return response()->json(["results"=>$user]);
         }catch (\Exception $exception){
-            $status = "Error";
-            $data = $exception->getMessage();
-
+            return response()->json(["error"=>$exception->getMessage()]);
         }
-        $array_json = [$status=="OK"?"results":"errors"=>$data, "status"=>$status];
 
-        return response()->json($array_json);
+    }
+
+    public function register(RegisterUserRequest $request): JsonResponse{
+
+        try {
+
+            $user = User::where('email',$request->email)->first();
+            if($user) return response()->json(["error"=>"User already exists!"])->setStatusCode(409);
+
+            $user = User::create([
+                'name'=>$request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password'])
+            ]);
+
+            return response()->json(["results"=>$user])->setStatusCode(201);
+        }catch (\Exception $exception){
+            $data = $exception->getMessage();
+            return response()->json($data)->setStatusCode(500);
+        }
+    }
+
+    public function getUsers(Request $request):JsonResponse{
+
+        try {
+            $users = User::all();
+            return response()->json(["results"=>$users]);
+        }catch(\Exception $exception){
+            return response()->json(["error:"=> $exception->getMessage()])->setStatusCode(500);
+        }
 
     }
 }
+
+

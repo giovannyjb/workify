@@ -22,9 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(["prefix"=>"task_list_app","as","task_list_app."],function(){
 
-    Route::group(["prefix"=>"user","as","user."],function()
+    Route::group(["prefix"=>"users","as","users."],function()
     {
         Route::post("login",[UserController::class,'login']);
+        Route::post("register",[UserController::class,'register']);
+        Route::get("/",[UserController::class,'getUsers']);
+
     }
     );
 });
