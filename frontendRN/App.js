@@ -2,16 +2,21 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { OwnTasks } from './src/screens/OwnTasks';
 import { MoodleTasks } from './src/screens/MoodleTasks';
 import { Historial } from './src/screens/Historial';
 import { StyleSheet, View } from 'react-native';
+import { useFonts } from 'expo-font';
+import { useCallback, useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { getHeaderTitle } from '@react-navigation/elements';
 
 const getTabBarIcon = (name) =>
   ({ focused, color, size }) => {
     const nameRe = focused ? name : name + "-outline";
-    return <MaterialCommunityIcons name={nameRe} color={focused ? "white" : "gray"} size={25} />
+    return <MaterialCommunityIcons name={nameRe} color={focused ? "white" : "#454545"} size={25} />
   }
 
 const theme = {
@@ -24,24 +29,57 @@ const Tab = createBottomTabNavigator();
 
 const App = () => {
 
+  const [fontsLoaded] = useFonts({
+    interRegular: require("./assets/fonts/Inter-Regular.ttf"),
+    interSemibold: require("./assets/fonts/Inter-SemiBold.ttf"),
+    interBold: require("./assets/fonts/Inter-Bold.ttf"),
+    interExtrabold: require("./assets/fonts/Inter-ExtraBold.ttf"),
+  });
+
   const navigationRef = useNavigationContainerRef();
+
+  useEffect(() => {
+    async () => {
+      await SplashScreen.preventAutoHideAsync();
+    }
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <>
       <StatusBar translucent />
-      <NavigationContainer ref={navigationRef} theme={theme}>
+      <NavigationContainer ref={navigationRef} onReady={onLayoutRootView} theme={theme}>
         <Tab.Navigator
           screenOptions={{
+            headerTitleStyle: {
+              fontSize: 24
+            },
+            headerLeftContainerStyle: {
+              paddingRight: 10,
+            },
+            headerRightContainerStyle: {
+              paddingRight: 20,
+            },
+            headerRight: () => <Ionicons size={35} color="white" name="person-circle-sharp" />,
             tabBarShowLabel: false,
             tabBarStyle: {
               position: 'absolute',
               bottom: 0,
               left: 0,
-              minHeight: 100,
-              borderLeftWidth: 1.5,
-              borderRightWidth: 1.5,
               borderTopLeftRadius: 50,
+              borderLeftWidth: 1.5,
               borderTopRightRadius: 50,
+              borderRightWidth: 1.5,
+              minHeight: 60,
               borderColor: "#383838",
               backgroundColor: "#242424"
             },
@@ -66,6 +104,7 @@ const App = () => {
             options={{
               tabBarIcon: getTabBarIcon("clipboard-list"),
               // tabBarBadge: 2
+
             }}
             name="Tasks"
             component={OwnTasks}
@@ -85,7 +124,7 @@ const App = () => {
             name="Historial"
             component={Historial} />
         </Tab.Navigator>
-      </NavigationContainer>
+      </NavigationContainer >
     </>
   );
 }

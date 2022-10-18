@@ -1,7 +1,12 @@
-import { Text } from "react-native"
+import { Text, View } from "react-native"
+import GlobalStyles from "../utils/GlobalStyles"
 
 export const MoodleTasks = () => {
     return (
-        <Text>MoodleTasks</Text>
+        <View style={GlobalStyles.screens}>
+            <View style={GlobalStyles.container}>
+                <Text>MoodleTasks</Text>
+            </View>
+        </View>
     )
 }
