@@ -93,6 +93,12 @@ export default StyleSheet.create({
         width: "100%",
         backgroundColor: "rgba(0, 0, 0, 0.5)"
 
+    },
+    mapContainer: {
+        flex: 1,
+    },
+    map: {
+        width: "100%",
+        height: "100%",
     }
-
 });

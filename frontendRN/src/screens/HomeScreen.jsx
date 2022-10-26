@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { FlatList, SafeAreaView, Text, TouchableHighlight, View } from 'react-native'
-import Animated from 'react-native-reanimated';
 import Task from '../components/Task';
 import GlobalStyles from '../utils/GlobalStyles'
-import Modal from "react-native-modal";
 
 
 export const HomeScreen = () => {

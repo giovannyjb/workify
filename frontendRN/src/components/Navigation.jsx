@@ -8,6 +8,7 @@ import { OwnTasks } from '../screens/OwnTasks';
 import { MoodleTasks } from '../screens/MoodleTasks';
 import { Historial } from '../screens/Historial';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Map from '../screens/Map';
 
 const getTabBarIcon = (name) =>
     ({ focused, color, size }) => {
@@ -72,7 +73,7 @@ const Navigation = ({ onLayoutRootView }) => {
                         // tabBarBadge: 2
                     }}
                     name="Home"
-                    component={HomeScreen}
+                    component={Map}
                 />
                 <Tab.Screen
                     options={{
@@ -81,7 +82,7 @@ const Navigation = ({ onLayoutRootView }) => {
 
                     }}
                     name="Tasks"
-                    component={OwnTasks}
+                    component={HomeScreen}//Replace for task component
                 />
                 <Tab.Screen
                     options={{
