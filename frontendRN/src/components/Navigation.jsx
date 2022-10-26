@@ -9,6 +9,7 @@ import { MoodleTasks } from '../screens/MoodleTasks';
 import { Historial } from '../screens/Historial';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Map from '../screens/Map';
+import { Alert, TouchableOpacity } from 'react-native';
 
 const getTabBarIcon = (name) =>
     ({ focused, color, size }) => {
@@ -22,13 +23,15 @@ const theme = {
     },
 };
 
+const profileHandle = () => (
+    <TouchableOpacity onPress={() => Alert.alert("Profile options", "View for profile options")}>
+        <Ionicons size={35} color="white" name="person-circle-sharp" />
+    </TouchableOpacity>
+);
 const Tab = createBottomTabNavigator();
 
 const Navigation = ({ onLayoutRootView }) => {
     const navigationRef = useNavigationContainerRef();
-
-
-
 
     return (
         <NavigationContainer ref={navigationRef} onReady={onLayoutRootView} theme={theme}>
@@ -44,7 +47,7 @@ const Navigation = ({ onLayoutRootView }) => {
                     headerRightContainerStyle: {
                         paddingRight: 20,
                     },
-                    headerRight: () => <Ionicons size={35} color="white" name="person-circle-sharp" />,
+                    headerRight: profileHandle,
                     tabBarShowLabel: false,
                     tabBarStyle: {
                         position: "absolute",
